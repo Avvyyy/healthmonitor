@@ -21,8 +21,8 @@ export default defineNuxtConfig({
     public: {
       supabaseUrl: process.env.VITE_SUPABASE_URL || '',
       supabaseAnonKey: process.env.VITE_SUPABASE_ANON_KEY || '',
-      websocketUrl: process.env.NUXT_PUBLIC_WEBSOCKET_URL || 'wss://your-backend-domain.com',
-      apiUrl: process.env.NUXT_PUBLIC_API_URL || 'https://your-backend-domain.com'
+      websocketUrl: process.env.NUXT_PUBLIC_WEBSOCKET_URL || 'wss://healthm0nitor.onrender.com',
+      apiUrl: process.env.NUXT_PUBLIC_API_URL || 'https://healthm0nitor.onrender.com'
     }
   },
   nitro: {
