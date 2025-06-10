@@ -185,7 +185,7 @@ const dataPointsPerMinute = computed(() => {
 const uptime = ref('99.9%')
 
 const connectWebSocket = () => {
-  connect('ws://localhost:8080')
+  connect()
 }
 
 const formatTimeAgo = (date) => {

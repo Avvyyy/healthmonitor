@@ -5,8 +5,9 @@ export const useWebSocket = () => {
   const lastMessage = ref(null)
   const reconnectAttempts = ref(0)
   const maxReconnectAttempts = 5
+  const config = useRuntimeConfig()
 
-  const connect = (url = 'ws://localhost:8080') => {
+  const connect = (url = config.public.websocketUrl) => {
     try {
       socket.value = new WebSocket(url)
       

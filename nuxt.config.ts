@@ -20,7 +20,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       supabaseUrl: process.env.VITE_SUPABASE_URL || '',
-      supabaseAnonKey: process.env.VITE_SUPABASE_ANON_KEY || ''
+      supabaseAnonKey: process.env.VITE_SUPABASE_ANON_KEY || '',
+      websocketUrl: process.env.NUXT_PUBLIC_WEBSOCKET_URL || 'ws://localhost:8080'
     }
   },
   pwa: {
