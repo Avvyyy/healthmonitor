@@ -17,7 +17,8 @@
     "db:generate": "cd backend && npx prisma generate",
     "db:studio": "cd backend && npx prisma studio",
     "db:seed": "cd backend && npx prisma db seed",
-    "deploy:frontend": "npm run build"
+    "deploy:frontend": "npm run build",
+    "deploy:netlify": "npm run build && netlify deploy --prod --dir=.output/public"
   },
   "dependencies": {
     "@nuxt/ui": "^2.18.7",
@@ -29,5 +30,8 @@
     "concurrently": "^8.2.2",
     "date-fns": "^3.6.0",
     "chart.js": "^4.4.0"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.0.0"
   }
 }

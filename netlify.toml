@@ -4,6 +4,8 @@
 
 [build.environment]
   NODE_VERSION = "18"
+  NUXT_PUBLIC_API_URL = "https://healthm0nitor.onrender.com"
+  NUXT_PUBLIC_WEBSOCKET_URL = "wss://healthm0nitor.onrender.com"
 
 [[redirects]]
   from = "/*"
