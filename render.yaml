@@ -18,7 +18,7 @@ services:
       - key: JWT_EXPIRES_IN
         value: "24h"
       - key: CORS_ORIGIN
-        value: "*"
+        value: "https://fancy-croquembouche-cbac4a.netlify.app"
 
 databases:
   - name: healthcare-db

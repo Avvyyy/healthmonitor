@@ -8,7 +8,10 @@ async function bootstrap() {
 
   // Enable CORS
   app.enableCors({
-    origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+    origin: [
+      'http://localhost:3000',
+      'https://fancy-croquembouche-cbac4a.netlify.app'
+    ],
     credentials: true,
   });
 
