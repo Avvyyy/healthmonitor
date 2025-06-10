@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
+import { UserRole } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
 
 @Injectable()
@@ -38,12 +39,15 @@ export class AuthService {
     password: string;
     firstName: string;
     lastName: string;
-    role?: string;
+    role?: UserRole;
   }) {
     const hashedPassword = await bcrypt.hash(userData.password, 10);
     const user = await this.usersService.create({
-      ...userData,
+      email: userData.email,
       password: hashedPassword,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      role: userData.role || UserRole.NURSE, // Default to NURSE if no role provided
     });
     
     const { password, ...result } = user;

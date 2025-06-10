@@ -19,7 +19,7 @@ export class CreateUserDto {
   @IsString()
   lastName: string;
 
-  @ApiProperty({ enum: UserRole, required: false })
+  @ApiProperty({ enum: UserRole, required: false, default: UserRole.NURSE })
   @IsOptional()
   @IsEnum(UserRole)
   role?: UserRole;
