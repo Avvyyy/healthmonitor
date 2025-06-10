@@ -1,5 +1,5 @@
 {
-  "name": "nuxt-app",
+  "name": "healthcare-monitoring-system",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,7 +9,14 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "websocket": "node server/websocket-server.cjs",
-    "dev:full": "concurrently \"npm run websocket\" \"npm run dev\""
+    "dev:full": "concurrently \"npm run websocket\" \"npm run backend:dev\" \"npm run dev\"",
+    "backend:dev": "cd backend && npm run start:dev",
+    "backend:build": "cd backend && npm run build",
+    "backend:start": "cd backend && npm run start:prod",
+    "db:migrate": "cd backend && npx prisma migrate dev",
+    "db:generate": "cd backend && npx prisma generate",
+    "db:studio": "cd backend && npx prisma studio",
+    "db:seed": "cd backend && npx prisma db seed"
   },
   "dependencies": {
     "@nuxt/ui": "^2.18.7",

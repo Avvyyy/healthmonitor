@@ -1,0 +1,169 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  firstName String
+  lastName  String
+  role      UserRole @default(NURSE)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  assignedPatients Patient[]
+  alerts           Alert[]
+
+  @@map("users")
+}
+
+model Patient {
+  id          String        @id @default(uuid())
+  firstName   String
+  lastName    String
+  dateOfBirth DateTime
+  gender      Gender
+  room        String
+  condition   String?
+  status      PatientStatus @default(STABLE)
+  admittedAt  DateTime      @default(now())
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  // Relations
+  assignedTo User?   @relation(fields: [userId], references: [id])
+  userId     String?
+
+  vitalSigns VitalSigns[]
+  devices    Device[]
+  alerts     Alert[]
+
+  @@map("patients")
+}
+
+model Device {
+  id           String       @id @default(uuid())
+  name         String
+  type         DeviceType
+  serialNumber String       @unique
+  batteryLevel Int          @default(100)
+  isConnected  Boolean      @default(false)
+  lastSeen     DateTime?
+  capabilities String[] // JSON array of capabilities
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  // Relations
+  patient   Patient? @relation(fields: [patientId], references: [id])
+  patientId String?
+
+  vitalSigns VitalSigns[]
+
+  @@map("devices")
+}
+
+model VitalSigns {
+  id                String    @id @default(uuid())
+  heartRate         Int?
+  systolicBP        Int?
+  diastolicBP       Int?
+  temperature       Float?
+  oxygenSaturation  Int?
+  respiratoryRate   Int?
+  steps             Int?
+  calories          Int?
+  sleepScore        Int?
+  stressLevel       Int?
+  hrv               Int?
+  vo2Max            Int?
+  timestamp         DateTime  @default(now())
+  createdAt         DateTime  @default(now())
+
+  // Relations
+  patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  patientId String
+
+  device   Device? @relation(fields: [deviceId], references: [id])
+  deviceId String?
+
+  @@map("vital_signs")
+}
+
+model Alert {
+  id          String      @id @default(uuid())
+  type        AlertType
+  severity    AlertSeverity
+  title       String
+  message     String
+  isRead      Boolean     @default(false)
+  isResolved  Boolean     @default(false)
+  triggeredAt DateTime    @default(now())
+  resolvedAt  DateTime?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  // Relations
+  patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  patientId String
+
+  assignedTo User?   @relation(fields: [userId], references: [id])
+  userId     String?
+
+  @@map("alerts")
+}
+
+enum UserRole {
+  ADMIN
+  DOCTOR
+  NURSE
+  TECHNICIAN
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum PatientStatus {
+  STABLE
+  WARNING
+  CRITICAL
+  DISCHARGED
+}
+
+enum DeviceType {
+  APPLE_WATCH
+  OURA_RING
+  FITBIT
+  GARMIN
+  HEART_MONITOR
+  BLOOD_PRESSURE_MONITOR
+  PULSE_OXIMETER
+  THERMOMETER
+}
+
+enum AlertType {
+  VITAL_SIGNS
+  DEVICE_DISCONNECTED
+  BATTERY_LOW
+  MEDICATION_REMINDER
+  EMERGENCY
+}
+
+enum AlertSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}

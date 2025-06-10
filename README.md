@@ -1,267 +1,326 @@
 # Healthcare Monitoring System
 
-A real-time patient vital signs monitoring system built with Nuxt 3, featuring WebSocket-based live data streaming and wearable device integration.
+A comprehensive real-time patient vital signs monitoring system built with **Nuxt 3** frontend and **NestJS** backend, featuring WebSocket-based live data streaming and wearable device integration.
 
-## 🏥 Overview
+## 🏥 System Architecture
 
-This healthcare monitoring system enables real-time monitoring of patients through wearable health devices such as smartwatches and Oura rings. The system provides a comprehensive dashboard for healthcare professionals to monitor patient vital signs, manage device connections, and receive real-time alerts.
+### Frontend (Nuxt 3)
+- **Real-time Dashboard**: Patient monitoring with live vital signs
+- **Device Management**: Wearable device connection and monitoring
+- **Interactive Charts**: Historical data visualization with Chart.js
+- **Responsive Design**: Medical-grade UI with proper accessibility
+
+### Backend (NestJS + Prisma + PostgreSQL)
+- **RESTful API**: Complete CRUD operations for all entities
+- **WebSocket Gateway**: Real-time bidirectional communication
+- **Database**: PostgreSQL with Prisma ORM
+- **Authentication**: JWT-based auth with role-based access
+- **API Documentation**: Swagger/OpenAPI integration
 
 ## ✨ Features
 
 ### 🔴 Real-Time Monitoring
-- **Live WebSocket Connection**: Real-time bidirectional communication between frontend and backend
-- **Continuous Vital Signs Streaming**: Heart rate, blood pressure, temperature, and oxygen saturation updates every 5 seconds
-- **Connection Status Indicators**: Visual feedback showing WebSocket connection status
-- **Real-time Alerts**: Instant notifications for critical patient conditions
+- **Live WebSocket Connection**: Real-time bidirectional communication
+- **Continuous Vital Signs Streaming**: Heart rate, blood pressure, temperature, oxygen saturation
+- **Automatic Alerts**: Smart alert system based on vital sign thresholds
+- **Real-time Charts**: Live updating data visualization
 
 ### 👥 Patient Management
-- **Patient Dashboard**: Overview of all patients with color-coded status indicators
-- **Individual Patient Views**: Detailed patient profiles with comprehensive vital signs
-- **Patient Registration**: Add new patients with medical information
+- **Complete Patient Records**: Demographics, medical history, room assignments
+- **Vital Signs History**: Comprehensive tracking with device attribution
 - **Status Classification**: Automatic categorization (Stable, Warning, Critical)
+- **Care Team Assignment**: Assign doctors and nurses to patients
 
 ### 📱 Wearable Device Integration
-- **Multi-Device Support**: 
-  - Apple Watch (Heart Rate, Steps, Calories, Sleep)
-  - Oura Ring (Heart Rate, Temperature, Sleep, HRV)
-  - Fitbit (Heart Rate, Steps, Calories, Sleep)
-  - Garmin Watch (Heart Rate, GPS, Steps, Calories)
-- **Device Discovery**: Scan and connect available wearable devices
-- **Battery Monitoring**: Track device battery levels and connection status
-- **Patient Assignment**: Connect devices to specific patients
+- **Multi-Device Support**: Apple Watch, Oura Ring, Fitbit, Garmin, medical devices
+- **Device Discovery & Connection**: Scan and connect available devices
+- **Battery & Status Monitoring**: Track device health and connectivity
+- **Real-time Data Streaming**: Live vital signs from connected devices
 
-### 📊 Data Visualization
-- **Interactive Charts**: 24-hour trend visualization using Chart.js
-- **Vital Signs Trends**: Historical data for heart rate, blood pressure, temperature, and oxygen saturation
-- **Color-Coded Indicators**: Visual representation of normal/warning/critical ranges
-- **Real-time Chart Updates**: Live data streaming to charts
+### 🚨 Alert System
+- **Smart Thresholds**: Automatic alert generation based on vital sign ranges
+- **Severity Levels**: Low, Medium, High, Critical alert classification
+- **Real-time Notifications**: Instant WebSocket-based alert delivery
+- **Alert Management**: Mark as read, resolve, assign to care team
 
-### 🎨 User Interface
-- **Medical-Grade Design**: Professional interface with proper color coding for medical environments
-- **Responsive Layout**: Optimized for desktop and mobile devices
-- **Smooth Animations**: Professional transitions and micro-interactions
-- **Accessibility**: High contrast ratios and readable fonts
+### 🔐 Security & Authentication
+- **JWT Authentication**: Secure token-based authentication
+- **Role-Based Access**: Admin, Doctor, Nurse, Technician roles
+- **API Security**: Protected endpoints with proper authorization
+- **Data Validation**: Comprehensive input validation and sanitization
 
-## 🚀 Getting Started
+## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18+ 
-- npm or yarn
+- **Node.js** 18+ 
+- **PostgreSQL** 15+
+- **npm** or **yarn**
 
-### Installation
+### 1. Clone & Install
+```bash
+git clone <repository-url>
+cd healthcare-monitoring-system
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd healthcare-monitoring-system
-   ```
+# Install root dependencies
+npm install
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+# Install backend dependencies
+cd backend && npm install && cd ..
+```
 
-3. **Start the complete system**
-   ```bash
-   # Start both WebSocket server and Nuxt dev server
-   npm run dev:full
-   ```
+### 2. Database Setup
+```bash
+# Start PostgreSQL with Docker
+docker-compose up -d postgres
 
-   Or run them separately:
-   ```bash
-   # Terminal 1: Start WebSocket server
-   npm run websocket
-   
-   # Terminal 2: Start Nuxt development server
-   npm run dev
-   ```
+# Setup database
+cd backend
+npx prisma migrate dev
+npx prisma generate
+npx prisma db seed
+cd ..
+```
 
-4. **Access the application**
-   - Frontend: http://localhost:3000
-   - WebSocket Server: ws://localhost:8080
+### 3. Environment Configuration
+```bash
+# Backend environment (backend/.env)
+DATABASE_URL="postgresql://healthcare_user:healthcare_password@localhost:5432/healthcare_db"
+JWT_SECRET="your-super-secret-jwt-key"
+PORT=3001
+CORS_ORIGIN="http://localhost:3000"
+```
+
+### 4. Start the System
+```bash
+# Start everything (WebSocket + Backend + Frontend)
+npm run dev:full
+
+# Or start individually:
+# Terminal 1: WebSocket Server
+npm run websocket
+
+# Terminal 2: Backend API
+npm run backend:dev
+
+# Terminal 3: Frontend
+npm run dev
+```
+
+### 5. Access the Application
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:3001
+- **API Documentation**: http://localhost:3001/api/docs
+- **Database Studio**: `npm run db:studio`
 
 ## 📁 Project Structure
 
 ```
 healthcare-monitoring-system/
-├── components/
-│   ├── DeviceConnectionStatus.vue    # Device status display
-│   ├── DeviceManager.vue            # Device management interface
-│   ├── PatientCard.vue              # Patient overview cards
-│   ├── RealTimeIndicator.vue        # Live data indicators
-│   ├── VitalCard.vue                # Individual vital sign cards
-│   └── VitalChart.vue               # Chart components
-├── composables/
-│   ├── useWearableDevices.js        # Device management logic
-│   └── useWebSocket.js              # WebSocket connection handling
-├── layouts/
-│   └── default.vue                  # Main application layout
-├── pages/
-│   ├── index.vue                    # Patient dashboard
-│   ├── devices.vue                  # Device management page
-│   └── patient/[id].vue             # Individual patient details
-├── server/
-│   └── websocket-server.js          # WebSocket server implementation
-├── assets/css/
-│   └── main.css                     # Global styles and medical animations
-└── nuxt.config.ts                   # Nuxt configuration
+├── frontend/                    # Nuxt 3 Frontend
+│   ├── components/             # Vue components
+│   ├── composables/           # Vue composables
+│   ├── layouts/               # Page layouts
+│   ├── pages/                 # Application pages
+│   └── assets/                # Static assets
+├── backend/                    # NestJS Backend
+│   ├── src/
+│   │   ├── auth/              # Authentication module
+│   │   ├── users/             # User management
+│   │   ├── patients/          # Patient management
+│   │   ├── devices/           # Device management
+│   │   ├── vital-signs/       # Vital signs tracking
+│   │   ├── alerts/            # Alert system
+│   │   ├── websocket/         # WebSocket gateway
+│   │   └── prisma/            # Database service
+│   ├── prisma/
+│   │   ├── schema.prisma      # Database schema
+│   │   └── seed.ts            # Database seeding
+│   └── .env                   # Environment variables
+├── server/                     # WebSocket Server
+│   └── websocket-server.cjs   # Standalone WebSocket server
+└── docker-compose.yml         # Database services
 ```
 
 ## 🔧 Available Scripts
 
-- `npm run dev` - Start Nuxt development server
+### Root Level
+- `npm run dev:full` - Start complete system (WebSocket + Backend + Frontend)
+- `npm run dev` - Start frontend only
 - `npm run websocket` - Start WebSocket server only
-- `npm run dev:full` - Start both WebSocket server and Nuxt dev server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run generate` - Generate static site
 
-## 📱 Application Pages
+### Backend
+- `npm run backend:dev` - Start backend in development mode
+- `npm run backend:build` - Build backend for production
+- `npm run backend:start` - Start backend in production mode
 
-### 1. **Dashboard** (`/`)
-- Main patient monitoring overview
-- Quick stats (Total patients, Critical alerts, Warnings, Stable patients)
-- Patient cards with real-time vital signs
-- Add new patient functionality
+### Database
+- `npm run db:migrate` - Run database migrations
+- `npm run db:generate` - Generate Prisma client
+- `npm run db:studio` - Open Prisma Studio
+- `npm run db:seed` - Seed database with sample data
 
-### 2. **Device Management** (`/devices`)
-- Wearable device scanning and discovery
-- Device connection to patients
-- Real-time connection statistics
-- Device activity logs
-- Supported device types overview
+## 📊 Database Schema
 
-### 3. **Patient Details** (`/patient/[id]`)
-- Comprehensive patient information
-- Real-time vital signs monitoring
-- 24-hour trend charts
-- Recent alerts and notifications
-- Patient medical history
+### Core Entities
+- **Users**: Healthcare staff (Admin, Doctor, Nurse, Technician)
+- **Patients**: Patient records with demographics and medical info
+- **Devices**: Wearable and medical devices with capabilities
+- **VitalSigns**: Time-series vital signs data
+- **Alerts**: Alert system with severity levels and assignments
 
-## 🔌 WebSocket API
+### Key Relationships
+- Users ↔ Patients (care team assignments)
+- Patients ↔ Devices (device assignments)
+- Patients ↔ VitalSigns (vital signs tracking)
+- Patients ↔ Alerts (patient-specific alerts)
+- Devices ↔ VitalSigns (device-attributed data)
 
-The WebSocket server provides real-time communication for:
+## 🌐 API Endpoints
 
-### Connection Events
-```javascript
-// Connection established
-{
-  "type": "connection",
-  "message": "Connected to healthcare monitoring WebSocket server",
-  "timestamp": "2025-01-01T12:00:00.000Z"
-}
-```
+### Authentication
+- `POST /auth/login` - User login
+- `POST /auth/register` - User registration
 
-### Vital Signs Data
-```javascript
-// Real-time vitals (sent every 5 seconds)
-{
-  "type": "vitals",
-  "data": {
-    "heartRate": 72,
-    "bloodPressure": {
-      "systolic": 120,
-      "diastolic": 80
-    },
-    "temperature": "98.6",
-    "oxygenSaturation": 98
-  },
-  "timestamp": "2025-01-01T12:00:00.000Z"
-}
-```
+### Patients
+- `GET /patients` - List all patients
+- `POST /patients` - Create new patient
+- `GET /patients/:id` - Get patient details
+- `GET /patients/:id/vitals` - Get patient vital signs
+- `PATCH /patients/:id` - Update patient
+- `DELETE /patients/:id` - Delete patient
 
-### Device Events
-```javascript
-// Device connection
-{
-  "type": "device_connect",
-  "deviceId": "apple_watch_001",
-  "patientId": "patient_123",
-  "timestamp": "2025-01-01T12:00:00.000Z"
-}
+### Devices
+- `GET /devices` - List all devices
+- `POST /devices` - Register new device
+- `POST /devices/:id/connect` - Connect device to patient
+- `POST /devices/:id/disconnect` - Disconnect device
 
-// Device data
-{
-  "type": "vitals_data",
-  "deviceId": "apple_watch_001",
-  "patientId": "patient_123",
-  "data": {
-    "heart_rate": 75,
-    "steps": 8500,
-    "calories": 450
-  },
-  "timestamp": "2025-01-01T12:00:00.000Z"
-}
-```
+### Vital Signs
+- `GET /vital-signs` - List vital signs
+- `POST /vital-signs` - Record new vital signs
+- `GET /vital-signs/patient/:id` - Get patient vital signs
+- `GET /vital-signs/device/:id` - Get device vital signs
 
-## 🎯 Current Status
+### Alerts
+- `GET /alerts` - List all alerts
+- `GET /alerts/unresolved` - Get unresolved alerts
+- `POST /alerts` - Create new alert
+- `PATCH /alerts/:id/resolve` - Resolve alert
 
-### ✅ Working Features
-- ✅ WebSocket real-time connection
-- ✅ Patient dashboard with live updates
-- ✅ Device management system
-- ✅ Individual patient detailed views
-- ✅ Interactive charts and data visualization
-- ✅ Responsive UI with medical-grade design
-- ✅ Real-time vital signs simulation
-- ✅ Device connection and status monitoring
+## 🔌 WebSocket Events
 
-### 🔄 Simulated Data
-Currently using mock data for demonstration. The system is ready for integration with:
-- Real wearable device APIs
-- Hospital management systems
-- Electronic Health Records (EHR)
-- Medical device protocols (HL7, FHIR)
+### Client → Server
+- `join_patient_room` - Subscribe to patient updates
+- `device_connect` - Connect device to patient
+- `device_disconnect` - Disconnect device
+- `vitals_data` - Send vital signs data
 
-## 🛠 Technology Stack
+### Server → Client
+- `vitals_update` - Real-time vital signs update
+- `new_alert` - New alert notification
+- `device_connected` - Device connection event
+- `patient_vitals_update` - Patient-specific vital signs
 
-- **Frontend**: Nuxt 3, Vue 3, Tailwind CSS
-- **UI Components**: Nuxt UI, Heroicons
-- **Charts**: Chart.js
-- **Real-time**: WebSocket (ws library)
-- **Styling**: Tailwind CSS with custom medical themes
-- **Fonts**: Inter (Google Fonts)
+## 🧪 Sample Data
 
-## 🔒 Security Considerations
+The system includes comprehensive sample data:
 
-- WebSocket connections use secure protocols
-- Patient data handling follows healthcare standards
-- Device authentication and authorization ready
-- HIPAA compliance considerations implemented
+### Sample Users
+- **Admin**: admin@healthcare.com / password123
+- **Doctor**: doctor@healthcare.com / password123  
+- **Nurse**: nurse@healthcare.com / password123
+
+### Sample Patients
+- **John Smith** (Stable) - ICU-101, Post-Surgery Recovery
+- **Sarah Johnson** (Warning) - Room 205, Pneumonia
+- **Michael Davis** (Critical) - ICU-102, Cardiac Monitoring
+
+### Sample Devices
+- Apple Watch, Oura Ring, Fitbit with realistic vital signs data
+- 24 hours of historical vital signs for each patient
+- Sample alerts with different severity levels
+
+## 🔒 Security Features
+
+- **JWT Authentication** with configurable expiration
+- **Role-based access control** (RBAC)
+- **Input validation** with class-validator
+- **CORS protection** with configurable origins
+- **Password hashing** with bcryptjs
+- **SQL injection protection** via Prisma ORM
 
 ## 🚀 Production Deployment
 
-For production deployment:
-
+### Backend Deployment
 1. **Build the application**
+   ```bash
+   cd backend && npm run build
+   ```
+
+2. **Set production environment variables**
+   ```bash
+   DATABASE_URL="your-production-database-url"
+   JWT_SECRET="your-production-jwt-secret"
+   NODE_ENV="production"
+   ```
+
+3. **Run database migrations**
+   ```bash
+   npx prisma migrate deploy
+   ```
+
+4. **Start the application**
+   ```bash
+   npm run start:prod
+   ```
+
+### Frontend Deployment
+1. **Build for production**
    ```bash
    npm run build
    ```
 
-2. **Configure environment variables**
-   ```bash
-   NUXT_PUBLIC_WEBSOCKET_URL=wss://your-websocket-server.com
-   ```
+2. **Deploy to your preferred platform** (Vercel, Netlify, etc.)
 
-3. **Deploy WebSocket server** to a cloud provider
-4. **Deploy Nuxt application** using your preferred hosting platform
+### Database
+- Use managed PostgreSQL (AWS RDS, Google Cloud SQL, etc.)
+- Configure connection pooling for production
+- Set up automated backups
+- Monitor database performance
 
-## 📄 License
+## 📈 Monitoring & Observability
 
-This project is licensed under the MIT License.
+### Health Checks
+- Database connectivity monitoring
+- WebSocket connection health
+- Device connectivity status
+- Alert system responsiveness
+
+### Metrics
+- Real-time patient count
+- Active device connections
+- Alert response times
+- System uptime
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## 📞 Support
+## 📄 License
 
-For support and questions, please open an issue in the repository.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+For support and questions:
+- Open an issue in the repository
+- Check the API documentation at `/api/docs`
+- Review the database schema in Prisma Studio
 
 ---
 
-**Note**: This system currently uses simulated data for demonstration purposes. For production use, integrate with actual wearable device APIs and medical systems.
+**⚕️ Built for Healthcare Professionals** - This system provides a solid foundation for real-time patient monitoring with room for customization based on specific healthcare requirements and compliance needs.
