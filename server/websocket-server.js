@@ -3,7 +3,7 @@ const WebSocket = require('ws')
 // Create WebSocket server
 const wss = new WebSocket.Server({ 
   port: 8080,
-  host: '0.0.0.0'
+  host: '127.0.0.1'
 })
 
 console.log('WebSocket server starting on ws://localhost:8080')
