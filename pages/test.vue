@@ -227,7 +227,12 @@
             <div class="text-sm text-gray-600">WebSocket Latency</div>
           </div>
           <div class="text-center p-4 bg-gray-50 rounded-lg">
-            <div class="text-2xl font-bold text-purple-600">{{ performanceMetrics.pageLoad }}ms</div>
+            <ClientOnly>
+              <div class="text-2xl font-bold text-purple-600">{{ performanceMetrics.pageLoad !== null ? performanceMetrics.pageLoad + 'ms' : '...' }}</div>
+              <template #fallback>
+                <div class="text-2xl font-bold text-purple-600">...</div>
+              </template>
+            </ClientOnly>
             <div class="text-sm text-gray-600">Page Load Time</div>
           </div>
         </div>
@@ -250,11 +255,11 @@ const workflowResults = ref([])
 const wsConnected = ref(false)
 const authToken = ref(null)
 
-// Performance metrics - initialize to 0 to avoid hydration mismatch
+// Performance metrics - initialize pageLoad to null to avoid hydration mismatch
 const performanceMetrics = ref({
   apiLatency: 0,
   wsLatency: 0,
-  pageLoad: 0
+  pageLoad: null
 })
 
 // Environment info - use useRequestURL for consistent server/client rendering
