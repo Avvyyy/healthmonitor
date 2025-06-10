@@ -16,7 +16,8 @@
     "db:migrate": "cd backend && npx prisma migrate dev",
     "db:generate": "cd backend && npx prisma generate",
     "db:studio": "cd backend && npx prisma studio",
-    "db:seed": "cd backend && npx prisma db seed"
+    "db:seed": "cd backend && npx prisma db seed",
+    "deploy:frontend": "npm run build"
   },
   "dependencies": {
     "@nuxt/ui": "^2.18.7",
