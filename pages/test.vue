@@ -250,19 +250,17 @@ const workflowResults = ref([])
 const wsConnected = ref(false)
 const authToken = ref(null)
 
-// Performance metrics
+// Performance metrics - initialize to 0 to avoid hydration mismatch
 const performanceMetrics = ref({
   apiLatency: 0,
   wsLatency: 0,
-  pageLoad: performance.now()
+  pageLoad: 0
 })
 
-// Environment info
+// Environment info - use useRequestURL for consistent server/client rendering
 const frontendUrl = computed(() => {
-  if (process.client) {
-    return window.location.origin
-  }
-  return 'https://fancy-croquembouche-cbac4a.netlify.app'
+  const url = useRequestURL()
+  return url.origin
 })
 
 // Status indicators
@@ -561,7 +559,7 @@ const formatTime = (date) => {
   return format(new Date(date), 'HH:mm:ss')
 }
 
-// Initialize page load time
+// Set page load time after component is mounted (client-side only)
 onMounted(() => {
   performanceMetrics.value.pageLoad = Math.round(performance.now())
 })
